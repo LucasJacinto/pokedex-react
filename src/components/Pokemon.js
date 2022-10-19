@@ -1,4 +1,4 @@
-import React, { useContext } from "react";
+import React, { useContext, useLayoutEffect, useRef } from "react";
 import FavoritesContext from "../contexts/favoritesContext";
 
 const Pokemon = (props) => {
@@ -6,13 +6,21 @@ const Pokemon = (props) => {
     useContext(FavoritesContext);
   const { pokemon } = props;
   const heart = favoritesPokemons.includes(pokemon.name) ? "❤️" : "💙";
+  
+  const containerRef = useRef();
 
   const onHeartClick = () => {
     updateFavoritesPokemons(pokemon.name);
   };
 
+  useLayoutEffect(() => {
+    {pokemon.types.map((type, index) => {
+      containerRef.current.classList.add(type.type.name);
+    })}
+  })
+
   return (
-    <div className="pokemon-card">
+    <div ref={containerRef} className="pokemon-card">
       <div className="pokemon-image-container">
         <img
           alt={pokemon.name}
